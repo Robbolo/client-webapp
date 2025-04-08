@@ -36,11 +36,14 @@
 <body>
     <div class="container">
         <h1>{{ client.name }}'s Profile</h1>
+        <p class="detail-label">Next session:</p> <p>{{ client.next_session_date}}</p>
+        <p class="detail-label">Frequency:</p> <p>{{ client.frequency }}</p>
         <p class="detail-label">Email:</p> <p>{{ client.email }}</p>
         <p class="detail-label">Location:</p> <p>{{ client.location }}</p>
         <p class="detail-label">Timezone:</p> <p>{{ client.timezone }}</p>
         <p class="detail-label">Status:</p> <p>{{ client.client_status }}</p>
         <p class="detail-label">Payment Tier:</p> <p>{{ client.payment_tier }}</p>
+        <p class="detail-label">Payment link:</p> <p>{{ client.paypal_link }}</p>
         <p class="detail-label">Last Contacted:</p> <p>{{ client.last_contacted }}</p>
     </div>
 </body>

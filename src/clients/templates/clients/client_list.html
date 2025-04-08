@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client List</title>
+
+    <!-- Bootstrap CSS from CDN -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .card {
+            border-radius: 8px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .card-text {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .btn-primary {
+            background-color: #6f42c1;
+            border-color: #6f42c1;
+        }
+
+        .btn-primary:hover {
+            background-color: #5a2e9b;
+            border-color: #5a2e9b;
+        }
+
+        .btn-secondary {
+            background-color: #adb5bd;
+            border-color: #adb5bd;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        .search-bar {
+            margin-bottom: 1.5rem;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #888;
+            font-size: 1.2rem;
+        }
+
+        .top-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="top-buttons">
+        <h1 class="mb-0">Client List</h1>
+        <a href="{% url 'notification_dashboard' %}" class="btn btn-primary">View Notifications</a>
+    </div>
+
+    <!-- Search Bar -->
+    <form method="get" class="search-bar">
+        <input type="text" name="query" value="{{ query }}" class="form-control" placeholder="Search clients...">
+    </form>
+
+    <!-- Client Cards Grid -->
+    <div class="row">
+        {% for client in clients %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ client.first_name }} {{ client.last_name }}</h5>
+                    <p class="card-text">
+                        <strong>Email:</strong> {{ client.email }}<br>
+                        <strong>Status:</strong> {{ client.client_status }}<br>
+                        <strong>Payment Tier:</strong> {{ client.payment_tier }}<br>
+                    </p>
+                    <a href="{% url 'client_detail' client.id %}" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="no-results">No clients found.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
