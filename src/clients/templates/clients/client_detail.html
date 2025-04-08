@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ client.name }}'s Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #0056b3;
+            font-size: 32px;
+        }
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        .detail-label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ client.name }}'s Profile</h1>
+        <p class="detail-label">Email:</p> <p>{{ client.email }}</p>
+        <p class="detail-label">Location:</p> <p>{{ client.location }}</p>
+        <p class="detail-label">Timezone:</p> <p>{{ client.timezone }}</p>
+        <p class="detail-label">Status:</p> <p>{{ client.client_status }}</p>
+        <p class="detail-label">Payment Tier:</p> <p>{{ client.payment_tier }}</p>
+        <p class="detail-label">Last Contacted:</p> <p>{{ client.last_contacted }}</p>
+    </div>
+</body>
+</html>
