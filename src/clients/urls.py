@@ -6,5 +6,7 @@ urlpatterns = [
     path('notifications/', views.notification_dashboard, name='notification_dashboard'),
     path('notifications/mark_as_read/<int:notification_id>/', views.mark_as_read, name='mark_as_read'),
     path('notifications/read/', views.read_notifications, name='read_notifications'),
-    path('client/<int:client_id>/', views.client_detail, name='client_detail')
+    path('client/<int:client_id>/', views.client_detail, name='client_detail'),
+    path('add-client/', views.add_client, name='add_client'),
+    path('client/<int:client_id>/edit/', views.edit_client, name='edit_client'),
     ]

@@ -1,5 +1,6 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Client, Notification
+from .forms import ClientForm
 from datetime import timedelta
 from django.utils import timezone
 from django.http import HttpResponseRedirect
@@ -65,3 +66,28 @@ def mark_as_read(request, notification_id):
 def read_notifications(request):
     notifications = Notification.objects.filter(read=True).order_by('-created_at')
     return render(request, 'clients/read_notifications.html', {'notifications': notifications})
+
+
+def add_client(request):
+    if request.method == 'POST':
+        form = ClientForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('client_list')  # Redirect to the client list view
+    else:
+        form = ClientForm()
+    
+    return render(request, 'clients/add_client.html', {'form': form})
+
+def edit_client(request, client_id):
+    client = get_object_or_404(Client, id=client_id)
+
+    if request.method == 'POST':
+        form = ClientForm(request.POST, instance=client)
+        if form.is_valid():
+            form.save()
+            return redirect('client_detail', client_id=client.id)
+    else:
+        form = ClientForm(instance=client)
+
+    return render(request, 'clients/edit_client.html', {'form': form, 'client': client})

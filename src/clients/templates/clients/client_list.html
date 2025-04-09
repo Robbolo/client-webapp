@@ -39,8 +39,14 @@
         }
 
         .btn-secondary {
-            background-color: #adb5bd;
-            border-color: #adb5bd;
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #138496;
+            border-color: #138496;
         }
 
         .container {
@@ -63,6 +69,11 @@
             align-items: center;
             margin-bottom: 1.5rem;
         }
+
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -70,7 +81,10 @@
 <div class="container mt-5">
     <div class="top-buttons">
         <h1 class="mb-0">Client List</h1>
-        <a href="{% url 'notification_dashboard' %}" class="btn btn-primary">View Notifications</a>
+        <div class="button-group">
+            <a href="{% url 'notification_dashboard' %}" class="btn btn-primary">View Notifications</a>
+            <a href="{% url 'add_client' %}" class="btn btn-secondary">Add New Client</a>
+        </div>
     </div>
 
     <!-- Search Bar -->
@@ -84,7 +98,7 @@
         <div class="col-md-4 mb-4">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">{{ client.first_name }} {{ client.last_name }}</h5>
+                    <h5 class="card-title">{{ client.name }}</h5>
                     <p class="card-text">
                         <strong>Email:</strong> {{ client.email }}<br>
                         <strong>Status:</strong> {{ client.client_status }}<br>
