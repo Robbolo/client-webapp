@@ -38,55 +38,24 @@
             <a href="{% url 'edit_client' client.id %}" class="btn btn-sm btn-light">Edit Client</a>
         </div>
         <div class="card-body">
+            {% if client.photo %}
+            <div class="text-center mb-4">
+                <img src="{{ client.photo.url }}" class="img-thumbnail" style="max-width: 200px;" alt="Client photo">
+            </div>
+            {% endif %}
             <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label>Email:</label>
-                    <div>{{ client.email }}</div>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>Phone Number:</label>
-                    <div>{{ client.phone_number }}</div>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>Location:</label>
-                    <div>{{ client.location }}</div>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>Timezone:</label>
-                    <div>{{ client.timezone }}</div>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>Next Session Date:</label>
-                    <div>{{ client.next_session_date }}</div>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>Client Source:</label>
-                    <div>{{ client.client_source }}</div>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>Status:</label>
-                    <div>{{ client.client_status }}</div>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>Payment Tier:</label>
-                    <div>{{ client.payment_tier }}</div>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>Frequency:</label>
-                    <div>{{ client.frequency }}</div>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>PayPal Link:</label>
-                    <div><a href="{{ client.paypal_link }}" target="_blank">{{ client.paypal_link }}</a></div>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>Last Contact Date:</label>
-                    <div>{{ client.last_contact_date }}</div>
-                </div>
-                <div class="col-12 mb-3">
-                    <label>Notes:</label>
-                    <div>{{ client.notes }}</div>
-                </div>
+                <div class="col-md-6 mb-3"><label>Email:</label><div>{{ client.email }}</div></div>
+                <div class="col-md-6 mb-3"><label>Phone Number:</label><div>{{ client.phone_number }}</div></div>
+                <div class="col-md-6 mb-3"><label>Location:</label><div>{{ client.location }}</div></div>
+                <div class="col-md-6 mb-3"><label>Timezone:</label><div>{{ client.timezone }}</div></div>
+                <div class="col-md-6 mb-3"><label>Next Session Date:</label><div>{{ client.next_session_date }}</div></div>
+                <div class="col-md-6 mb-3"><label>Client Source:</label><div>{{ client.client_source }}</div></div>
+                <div class="col-md-6 mb-3"><label>Status:</label><div>{{ client.client_status }}</div></div>
+                <div class="col-md-6 mb-3"><label>Payment Tier:</label><div>{{ client.payment_tier }}</div></div>
+                <div class="col-md-6 mb-3"><label>Frequency:</label><div>{{ client.frequency }}</div></div>
+                <div class="col-md-6 mb-3"><label>PayPal Link:</label><div><a href="{{ client.paypal_link }}" target="_blank">{{ client.paypal_link }}</a></div></div>
+                <div class="col-md-6 mb-3"><label>Last Contact Date:</label><div>{{ client.last_contact_date }}</div></div>
+                <div class="col-12 mb-3"><label>Notes:</label><div>{{ client.notes }}</div></div>
             </div>
             <a href="{% url 'client_list' %}" class="btn btn-secondary">Back to Client List</a>
         </div>

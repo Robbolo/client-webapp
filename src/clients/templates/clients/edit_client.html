@@ -37,7 +37,7 @@
             Edit Client: {{ client.name }}
         </div>
         <div class="card-body">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="row">
                     {% for field in form %}
@@ -52,8 +52,10 @@
                         </div>
                     {% endfor %}
                 </div>
-                <button type="submit" class="btn btn-purple">Save Changes</button>
-                <a href="{% url 'client_detail' client.id %}" class="btn btn-secondary">Cancel</a>
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'client_detail' client.id %}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-purple">Save Changes</button>
+                </div>
             </form>
         </div>
     </div>

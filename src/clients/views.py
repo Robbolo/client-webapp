@@ -70,7 +70,7 @@ def read_notifications(request):
 
 def add_client(request):
     if request.method == 'POST':
-        form = ClientForm(request.POST)
+        form = ClientForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('client_list')  # Redirect to the client list view
@@ -83,7 +83,7 @@ def edit_client(request, client_id):
     client = get_object_or_404(Client, id=client_id)
 
     if request.method == 'POST':
-        form = ClientForm(request.POST, instance=client)
+        form = ClientForm(request.POST, request.FILES, instance=client)
         if form.is_valid():
             form.save()
             return redirect('client_detail', client_id=client.id)

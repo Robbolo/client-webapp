@@ -18,6 +18,7 @@ class ClientForm(forms.ModelForm):
             'paypal_link',
             'last_contact_date',
             'notes',
+            'photo',
         ]
         widgets = {
             'next_session_date': forms.DateInput(attrs={'type': 'date'}),
