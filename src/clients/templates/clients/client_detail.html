@@ -1,4 +1,6 @@
-{% load static %}
+{% extends 'clients/base.html' %}
+{% block title %}Client Details{% endblock %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,6 +37,7 @@
     </style>
 </head>
 <body>
+
 <div class="container mt-5">
 
     <!-- Client Detail Card -->
@@ -141,3 +144,4 @@
 </div>
 </body>
 </html>
+{% endblock %}

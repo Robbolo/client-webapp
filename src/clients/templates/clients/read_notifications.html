@@ -1,3 +1,6 @@
+{% extends 'clients/base.html' %}
+{% block title %}Read notifications{% endblock %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,6 +10,7 @@
         .notification { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; border-radius: 8px; background-color: #e6e6e6; }
     </style>
 </head>
+
 <body>
     <h2>Completed Notifications</h2>
     {% if notifications %}
@@ -23,3 +27,4 @@
     <a href="{% url 'notification_dashboard' %}">⬅ Back to Active Notifications</a>
 </body>
 </html>
+{% endblock %}

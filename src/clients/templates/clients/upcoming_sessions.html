@@ -1,4 +1,6 @@
-{% load static %}
+{% extends 'clients/base.html' %}
+{% block title %}Upcoming Sessions{% endblock %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,6 +23,7 @@
         }
     </style>
 </head>
+
 <body>
 <div class="container mt-5">
     <div class="card">
@@ -75,3 +78,4 @@
 </div>
 </body>
 </html>
+{%endblock%}
