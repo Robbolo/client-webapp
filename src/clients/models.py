@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 # Create class for client information
@@ -12,9 +13,9 @@ class Client(models.Model):
         choices=[
             ('UK', 'UK'),
             ('Europe', 'Europe'),
-            ('USE', 'US East'),
-            ('USW', 'US West'),
-            ('USC', 'US Central'),
+            ('US East', 'US East'),
+            ('US West', 'US West'),
+            ('US Central', 'US Central'),
             ('Canada', 'Canada'),
             ('Australia', 'Australia'),
             ('Asia', 'Asia'),
@@ -22,7 +23,6 @@ class Client(models.Model):
         ],
         default='UK'
         )
-    next_session_date = models.DateField(null=True, blank=True)
     client_source = models.CharField(
         max_length=50,
         choices=[
@@ -32,35 +32,36 @@ class Client(models.Model):
             ('Website', 'Website'),
             ('Other', 'Other')
             ],
-            default='facebook'
+            default='Other'
+
             )
     client_status = models.CharField( 
         max_length=50,
         choices=[
-            ('enquiring', 'Enquiring'),
-            ('vibe-check booked', 'Vibe-Check Booked'),
-            ('post-vibe', 'Post-Vibe'),
-            ('paying', 'Paying')
+            ('Enquiring', 'Enquiring'),
+            ('Vibe-Check Booked', 'Vibe-Check Booked'),
+            ('Post-Vibe', 'Post-Vibe'),
+            ('Paying', 'Paying')
             ],
-            default='enquiring'
+            default='Enquiring'
             )
     payment_tier = models.CharField(  
         max_length=50,
         choices=[
-            ('free', 'Free'), 
-            ('three-session', 'Three-session package'), 
-            ('six-session', 'Six-session package'),
+            ('Free', 'Free'), 
+            ('Three-session package', 'Three-session package'), 
+            ('Six-session package', 'Six-session package'),
             ],
-            default='free' 
+            default='Free' 
             )
     frequency = models.CharField(
         max_length=50,
         choices=[
-            ('weekly', 'Weekly'),
-            ('bi-weekly', 'Bi-weekly'),
-            ('monthly', 'Monthly'),
-            ('adhoc', 'Ad-hoc'),
-            ('paused', 'Paused')
+            ('Weekly', 'Weekly'),
+            ('Fornightly', 'Fortnightly'),
+            ('Monthly', 'Monthly'),
+            ('Ad-hoc', 'Ad-hoc'),
+            ('Paused', 'Paused')
             ],
             default='Ad-hoc'
             )
@@ -85,3 +86,21 @@ class Notification(models.Model):
     @property
     def is_new(self):
         return not self.read
+    
+class Session(models.Model):
+    client = models.ForeignKey('Client', on_delete=models.CASCADE, related_name='sessions')
+    date = models.DateTimeField()
+    session_type = models.CharField(
+        max_length=50,
+        choices=[
+            ('Free', 'Free'),
+            ('Lightning', 'Lightning'),
+            ('Package', 'Package'),
+        ])
+    topic = models.CharField(max_length=200, blank=True)
+    notes = models.TextField(blank=True)
+    is_completed = models.BooleanField(default=False)
+    is_no_show = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.client.name} - {self.date.strftime('%Y-%m-%d %H:%M')}"

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Client, Notification
-from .forms import ClientForm
+from .models import Client, Notification, Session
+from .forms import ClientForm, SessionForm
 from datetime import timedelta
 from django.utils import timezone
 from django.http import HttpResponseRedirect
@@ -9,7 +9,13 @@ from django.urls import reverse
 # Create your views here.
 def client_detail(request, client_id):
     client = get_object_or_404(Client, id=client_id)
-    return render(request, 'clients/client_detail.html', {'client': client})
+    # Get the client's sessions
+    upcoming_sessions = client.sessions.filter(is_completed=False).order_by('date')
+    past_sessions = client.sessions.filter(is_completed=True).order_by('-date')
+    return render(request, 'clients/client_detail.html', {'client': client,
+                                                          'upcoming_sessions': upcoming_sessions,
+                                                          'past_sessions': past_sessions
+                                                          })
 
 def client_list(request):
     query = request.GET.get('q', '')  # Get search term from URL query parameter (default empty string)
@@ -91,3 +97,53 @@ def edit_client(request, client_id):
         form = ClientForm(instance=client)
 
     return render(request, 'clients/edit_client.html', {'form': form, 'client': client})
+
+
+def add_session(request, client_id):
+    client = get_object_or_404(Client, pk=client_id)
+
+    if request.method == 'POST':
+        form = SessionForm(request.POST)
+        if form.is_valid():
+            session = form.save(commit=False)
+            session.client = client  # ✅ Link session to the correct client
+            session.save()
+            return redirect('client_detail', client_id=client.id)
+    else:
+        form = SessionForm()
+
+    return render(request, 'clients/add_session.html', {'form': form, 'client': client})
+
+def mark_session_completed(request, session_id):
+    session = get_object_or_404(Session, pk=session_id)
+    session.is_completed = True
+    session.is_no_show = False
+    session.save()
+    return redirect('client_detail', client_id=session.client.id)
+
+def mark_session_no_show(request, session_id):
+    session = get_object_or_404(Session, pk=session_id)
+    session.is_completed = True
+    session.is_no_show = True
+    session.save()
+    return redirect('client_detail', client_id=session.client.id)
+
+
+def undo_session_status(request, session_id):
+    session = get_object_or_404(Session, pk=session_id)
+    session.is_completed = False
+    session.is_no_show = False
+    session.save()
+    return redirect('client_detail', client_id=session.client.id)
+
+def upcoming_sessions(request):
+    sessions = Session.objects.filter(is_completed=False).order_by('date')
+
+    today = timezone.localtime(timezone.now()).date()
+    tomorrow = today + timedelta(days=1)
+
+    return render(request, 'clients/upcoming_sessions.html', {
+        'sessions': sessions,
+        'today': today,
+        'tomorrow': tomorrow,
+    })

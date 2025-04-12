@@ -12,6 +12,7 @@
         .card {
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
         }
         .card-header {
             background-color: #6f42c1;
@@ -28,10 +29,15 @@
         .btn-purple:hover {
             background-color: #59359d;
         }
+        table th {
+            background-color: #eee;
+        }
     </style>
 </head>
 <body>
 <div class="container mt-5">
+
+    <!-- Client Detail Card -->
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span>Client Details: {{ client.name }}</span>
@@ -40,7 +46,7 @@
         <div class="card-body">
             {% if client.photo %}
             <div class="text-center mb-4">
-                <img src="{{ client.photo.url }}" class="img-thumbnail" style="max-width: 200px;" alt="Client photo">
+                <img src="{{ client.photo.url }}" class="img-thumbnail" style="max-width: 400px; max-height: 400px;" alt="Client photo">
             </div>
             {% endif %}
             <div class="row">
@@ -48,7 +54,6 @@
                 <div class="col-md-6 mb-3"><label>Phone Number:</label><div>{{ client.phone_number }}</div></div>
                 <div class="col-md-6 mb-3"><label>Location:</label><div>{{ client.location }}</div></div>
                 <div class="col-md-6 mb-3"><label>Timezone:</label><div>{{ client.timezone }}</div></div>
-                <div class="col-md-6 mb-3"><label>Next Session Date:</label><div>{{ client.next_session_date }}</div></div>
                 <div class="col-md-6 mb-3"><label>Client Source:</label><div>{{ client.client_source }}</div></div>
                 <div class="col-md-6 mb-3"><label>Status:</label><div>{{ client.client_status }}</div></div>
                 <div class="col-md-6 mb-3"><label>Payment Tier:</label><div>{{ client.payment_tier }}</div></div>
@@ -60,6 +65,79 @@
             <a href="{% url 'client_list' %}" class="btn btn-secondary">Back to Client List</a>
         </div>
     </div>
+
+    <!-- Sessions Card -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Sessions</span>
+            <a href="{% url 'add_session' client.id %}" class="btn btn-sm btn-light">Add Session</a>
+        </div>
+        <div class="card-body">
+
+            <!-- Upcoming Sessions -->
+            {% if upcoming_sessions %}
+                <h5>Upcoming Sessions</h5>
+                <table class="table table-bordered table-sm mb-4">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Topic</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for session in upcoming_sessions %}
+                        <tr>
+                            <td>{{ session.date|date:"D, M d Y H:i" }}</td>
+                            <td>{{ session.session_type|title }}</td>
+                            <td>{{ session.topic }}</td>
+                            <td>{{ session.notes|linebreaksbr }}</td>
+                            <td>
+                                <a href="{% url 'mark_session_completed' session.id %}" class="btn btn-sm btn-success">Completed</a>
+                                <a href="{% url 'mark_session_no_show' session.id %}" class="btn btn-sm btn-danger">No Show</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-muted">No upcoming sessions scheduled.</p>
+            {% endif %}
+
+            <!-- Past Sessions -->
+            {% if past_sessions %}
+                <h5>Past Sessions</h5>
+                <table class="table table-bordered table-sm">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Topic</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for session in past_sessions %}
+                        <tr {% if session.is_no_show %} class="table-danger" {% endif %}>
+                            <td>{{ session.date|date:"D, M d Y H:i" }}</td>
+                            <td>{{ session.session_type|title }}</td>
+                            <td>{{ session.topic }}</td>
+                            <td>{{ session.notes|linebreaksbr }}</td>
+                            <td>
+                                <a href="{% url 'undo_session_status' session.id %}" class="btn btn-sm btn-warning mt-2">Undo</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-muted">No past sessions with this client.</p>
+            {% endif %}
+
+        </div>
+    </div>
+
 </div>
 </body>
 </html>
