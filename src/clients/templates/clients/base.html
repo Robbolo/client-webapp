@@ -6,14 +6,150 @@
     <title>{% block title %}Client App{% endblock %}</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; }
-        .navbar-brand { font-weight: bold; }
-    </style>
+        /* General Page Styling */
+        body {
+            background-color: hsl(108, 26%, 78%); /* Light sage green */
+            font-family: 'Arial', sans-serif;
+            padding-top: 0;
+            margin-top: 0;
+        }
+    
+        /* Navbar Styling */
+        .navbar-brand {
+            font-weight: bold;
+        }
+    
+        .navbar-green {
+            background-color: #114422 !important; /* Dark forest green */
+        }
+    
+        /* Card Layout */
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            border: 2px solid #c5d7c2;
+        }
+    
+        .card-header {
+            background-color: #114422;
+            color: white;
+            font-size: 1.25rem;
+        }
+    
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+    
+        .card-text {
+            font-size: 1rem;
+            color: #2f4f2f;
+        }
+    
+        .form-group label,
+        .card-body label {
+            font-weight: 600;
+            color: #114422;
+        }
+    
+        /* Buttons */
+        .btn-primary {
+            background-color: #357a38;
+            border-color: #357a38;
+            color: white;
+        }
+    
+        .btn-primary:hover {
+            background-color: #285c2b;
+            border-color: #285c2b;
+        }
+    
+        .btn-secondary {
+            background-color: #5a9e6f;
+            border-color: #5a9e6f;
+            color: white;
+        }
+    
+        .btn-secondary:hover {
+            background-color: #457d56;
+            border-color: #457d56;
+        }
+    
+        .btn-purple, /* Legacy green override */
+        .btn-green {
+            background-color: #3b7a57;
+            color: white;
+        }
+    
+        .btn-purple:hover,
+        .btn-green:hover {
+            background-color: #2d5f44;
+        }
+    
+        /* Notification Cards */
+        .notification-card {
+            background-color: #daf3d4;
+            border-left: 6px solid #114422;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+    
+        .notification {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background-color: #e4efe1;
+        }
+    
+        /* Utility Classes */
+        .soft-green {
+            background-color: #d8f3dc !important;
+        }
+    
+        .container {
+            max-width: 1200px;
+        }
+    
+        .search-bar {
+            margin-bottom: 1.5rem;
+        }
+    
+        .no-results {
+            text-align: center;
+            color: #888;
+            font-size: 1.2rem;
+        }
+    
+        .top-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+    
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+    
+        table th {
+            background-color: #114422;
+            color: white;
+        }
+    
+        .img-thumbnail {
+            max-width: 200px;
+            object-fit: cover;
+        }
+    </style>    
 </head>
 <body>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+<nav class="navbar navbar-expand-lg navbar-dark navbar-green mb-4">
     <div class="container">
         <a class="navbar-brand" href="{% url 'client_list' %}">Katie's Client Onboarding and Customer Knowledge Portal</a>
         <div class="collapse navbar-collapse">

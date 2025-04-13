@@ -1,13 +1,7 @@
 {% extends 'clients/base.html' %}
 {% block title %}Add New Session{% endblock %}
 {% block content %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add Session</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+
 <div class="container mt-5">
     <h2 class="mb-4">Add Session for {{ client.name }}</h2>
     <form method="post">
@@ -17,6 +11,5 @@
         <a href="{% url 'client_detail' client.id %}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
-</body>
-</html>
+
 {% endblock %}

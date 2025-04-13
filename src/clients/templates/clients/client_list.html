@@ -1,93 +1,12 @@
 {% extends 'clients/base.html' %}
 {% block title %}Client List{% endblock %}
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client List</title>
 
-    <!-- Bootstrap CSS from CDN -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Arial', sans-serif;
-        }
-
-        .card {
-            border-radius: 8px;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: bold;
-        }
-
-        .card-text {
-            font-size: 1rem;
-            color: #555;
-        }
-
-        .btn-primary {
-            background-color: #6f42c1;
-            border-color: #6f42c1;
-        }
-
-        .btn-primary:hover {
-            background-color: #5a2e9b;
-            border-color: #5a2e9b;
-        }
-
-        .btn-secondary {
-            background-color: #17a2b8;
-            border-color: #17a2b8;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background-color: #138496;
-            border-color: #138496;
-        }
-
-        .container {
-            max-width: 1200px;
-        }
-
-        .search-bar {
-            margin-bottom: 1.5rem;
-        }
-
-        .no-results {
-            text-align: center;
-            color: #888;
-            font-size: 1.2rem;
-        }
-
-        .top-buttons {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 0.5rem;
-        }
-    </style>
-</head>
-<body>
-
-<div class="container mt-5">
+<div class="mt-5">
     <div class="top-buttons">
         <h1 class="mb-0">Client List</h1>
         <div class="button-group">
-            <a href="{% url 'upcoming_sessions' %}" class="btn btn-outline-primary mr-2">Upcoming Sessions</a>
-            <a href="{% url 'notification_dashboard' %}" class="btn btn-primary">View Notifications</a>
-            <a href="{% url 'add_client' %}" class="btn btn-secondary">Add New Client</a>
+            <a href="{% url 'add_client' %}" class="btn btn-primary">Add New Client</a>
         </div>
     </div>
 
@@ -120,10 +39,4 @@
     </div>
 </div>
 
-<!-- Bootstrap JS and Popper.js -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
 {% endblock %}

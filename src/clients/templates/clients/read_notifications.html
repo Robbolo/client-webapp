@@ -1,17 +1,7 @@
 {% extends 'clients/base.html' %}
 {% block title %}Read notifications{% endblock %}
 {% block content %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Read Notifications</title>
-    <style>
-        body { font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px; }
-        .notification { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; border-radius: 8px; background-color: #e6e6e6; }
-    </style>
-</head>
 
-<body>
     <h2>Completed Notifications</h2>
     {% if notifications %}
         {% for notification in notifications %}
@@ -25,6 +15,5 @@
         <p>No completed notifications.</p>
     {% endif %}
     <a href="{% url 'notification_dashboard' %}">⬅ Back to Active Notifications</a>
-</body>
-</html>
+
 {% endblock %}
