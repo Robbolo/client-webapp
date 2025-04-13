@@ -1,5 +1,5 @@
 from django import forms
-from .models import Client, Session
+from .models import Client, Session, ClientDocument
 
 class ClientForm(forms.ModelForm):
     class Meta:
@@ -31,4 +31,12 @@ class SessionForm(forms.ModelForm):
         widgets = {
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'notes': forms.Textarea(attrs={'rows': 4}),
+        }
+
+class ClientDocumentForm(forms.ModelForm):
+    class Meta:
+        model = ClientDocument
+        fields = ['file', 'description']
+        widgets = {
+            'description': forms.TextInput(attrs={'class': 'form-control'}),
         }

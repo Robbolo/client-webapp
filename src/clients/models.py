@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils import timezone
+from django.core.validators import FileExtensionValidator
+from pathlib import Path
 
 
 # Create class for client information
@@ -104,3 +106,24 @@ class Session(models.Model):
 
     def __str__(self):
         return f"{self.client.name} - {self.date.strftime('%Y-%m-%d %H:%M')}"
+    
+    
+class ClientDocument(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='documents')
+    file = models.FileField(
+        upload_to='documents/',
+        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'doc', 'docx', 'txt', 'xls', 'xlsx', 'csv'])]
+    )
+    description = models.CharField(max_length=255, blank=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def file_extension(self):
+        return Path(self.file.name).suffix.lower()
+    
+    @property
+    def file_size_kb(self):
+        return round(self.file.size / 1024, 1)  # returns size in KB
+
+    def __str__(self):
+        return f"Document for {self.client.name}: {self.file.name}"

@@ -28,7 +28,34 @@
                 <div class="col-md-6 mb-3"><label>Last Contact Date:</label><div>{{ client.last_contact_date }}</div></div>
                 <div class="col-12 mb-3"><label>Notes:</label><div>{{ client.notes }}</div></div>
             </div>
-            <a href="{% url 'client_list' %}" class="btn btn-secondary">Back to Client List</a>
+        </div>
+    </div>
+    <!-- Document Upload Section -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Documents</span>
+            <a href="{% url 'upload_document' client.id %}" class="btn btn-sm btn-light">Upload Document</a>
+        </div>
+        <div class="card-body">
+            {% if client.documents.all %}
+                <ul class="list-group">
+                    {% for doc in client.documents.all|dictsortreversed:"uploaded_at" %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ doc.description|default:"Untitled Document" }}</strong><br>
+                            <small class="text-muted">
+                                {{ doc.uploaded_at|date:"M d, Y - H:i" }} · 
+                                {{ doc.file_extension|cut:"."|upper }} file · 
+                                {{ doc.file_size_kb }} KB
+                            </small>
+                        </div>
+                        <a href="{{ doc.file.url }}" target="_blank" class="btn btn-sm btn-outline-secondary">Open</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">No documents uploaded for this client yet.</p>
+            {% endif %}
         </div>
     </div>
 

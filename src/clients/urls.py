@@ -16,4 +16,5 @@ urlpatterns = [
     path('session/<int:session_id>/no-show/', views.mark_session_no_show, name='mark_session_no_show'),
     path('session/<int:session_id>/undo/', views.undo_session_status, name='undo_session_status'),
     path('sessions/upcoming/', views.upcoming_sessions, name='upcoming_sessions'),
+    path('client/<int:client_id>/upload-document/', views.upload_document, name='upload_document'),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

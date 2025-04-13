@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Client, Notification, Session
-from .forms import ClientForm, SessionForm
+from .forms import ClientForm, SessionForm, ClientDocumentForm
 from datetime import timedelta
 from django.utils import timezone
 from django.http import HttpResponseRedirect
@@ -147,3 +147,18 @@ def upcoming_sessions(request):
         'today': today,
         'tomorrow': tomorrow,
     })
+
+def upload_document(request, client_id):
+    client = get_object_or_404(Client, pk=client_id)
+
+    if request.method == 'POST':
+        form = ClientDocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            document = form.save(commit=False)
+            document.client = client
+            document.save()
+            return redirect('client_detail', client_id=client.id)
+    else:
+        form = ClientDocumentForm()
+
+    return render(request, 'clients/upload_document.html', {'form': form, 'client': client})
