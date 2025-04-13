@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Client, Notification, Session
+from .models import Client, Notification, Session, ClientDocument
 from .forms import ClientForm, SessionForm, ClientDocumentForm
 from datetime import timedelta
 from django.utils import timezone
