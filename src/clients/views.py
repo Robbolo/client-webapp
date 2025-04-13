@@ -5,6 +5,7 @@ from datetime import timedelta
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.views.decorators.http import require_POST
 
 # Create your views here.
 def client_detail(request, client_id):
@@ -162,3 +163,12 @@ def upload_document(request, client_id):
         form = ClientDocumentForm()
 
     return render(request, 'clients/upload_document.html', {'form': form, 'client': client})
+
+
+@require_POST
+def delete_document(request, document_id):
+    document = get_object_or_404(ClientDocument, id=document_id)
+    client_id = document.client.id
+    document.file.delete()  # deletes the file from disk
+    document.delete()       # deletes the record from DB
+    return redirect('client_detail', client_id=client_id)

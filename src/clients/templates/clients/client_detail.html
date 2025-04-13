@@ -34,7 +34,7 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span>Documents</span>
-            <a href="{% url 'upload_document' client.id %}" class="btn btn-sm btn-light">Upload Document</a>
+            <a href="{% url 'upload_document' client.id %}" class="btn btn-sm btn-primary">Upload Document</a>
         </div>
         <div class="card-body">
             {% if client.documents.all %}
@@ -49,7 +49,13 @@
                                 {{ doc.file_size_kb }} KB
                             </small>
                         </div>
-                        <a href="{{ doc.file.url }}" target="_blank" class="btn btn-sm btn-outline-secondary">Open</a>
+                        <div class="d-flex align-items-center">
+                            <a href="{{ doc.file.url }}" target="_blank" class="btn btn-sm btn-outline-secondary">Open</a>
+                            <form method="post" action="{% url 'delete_document' doc.id %}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this document?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger ml-2">Delete</button>
+                            </form>
+                        </div>
                     </li>
                     {% endfor %}
                 </ul>
@@ -58,6 +64,7 @@
             {% endif %}
         </div>
     </div>
+    
 
     <!-- Sessions Card -->
     <div class="card">
