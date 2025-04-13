@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Client, Notification, Session
+from .models import Client, Notification, Session, ClientDocument
 
 # Register your models here.
 @admin.register(Client)
@@ -15,3 +15,8 @@ class SessionAdmin(admin.ModelAdmin):
     list_display = ['client', 'date', 'session_type', 'is_completed', 'is_no_show']
     list_filter = ['is_completed', 'session_type']
     search_fields = ['client__name', 'topic']
+
+@admin.register(ClientDocument)
+class ClientDocumentAdmin(admin.ModelAdmin):
+    list_display = ['client', 'description', 'file']
+    search_fields = ['client__name', 'description']
