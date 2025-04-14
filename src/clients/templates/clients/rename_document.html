@@ -1,0 +1,22 @@
+{% extends 'clients/base.html' %}
+{% block title %}Rename Document{% endblock %}
+{% block content %}
+
+<div class="mt-5">
+    <div class="card">
+        <div class="card-header">Rename Document</div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_description">New Description</label>
+                    {{ form.description }}
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a href="{% url 'client_detail' document.client.id %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -18,4 +18,5 @@ urlpatterns = [
     path('sessions/upcoming/', views.upcoming_sessions, name='upcoming_sessions'),
     path('client/<int:client_id>/upload-document/', views.upload_document, name='upload_document'),
     path('document/<int:document_id>/delete/', views.delete_document, name='delete_document'),
+    path('document/<int:document_id>/rename/', views.rename_document, name='rename_document'),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

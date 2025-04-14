@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Client, Notification, Session, ClientDocument
-from .forms import ClientForm, SessionForm, ClientDocumentForm
+from .forms import ClientForm, SessionForm, ClientDocumentForm, RenameDocumentForm
 from datetime import timedelta
 from django.utils import timezone
 from django.http import HttpResponseRedirect
@@ -172,3 +172,18 @@ def delete_document(request, document_id):
     document.file.delete()  # deletes the file from disk
     document.delete()       # deletes the record from DB
     return redirect('client_detail', client_id=client_id)
+
+def rename_document(request, document_id):
+    document = get_object_or_404(ClientDocument, id=document_id)
+    if request.method == 'POST':
+        form = RenameDocumentForm(request.POST, instance=document)
+        if form.is_valid():
+            form.save()
+            return redirect('client_detail', client_id=document.client.id)
+    else:
+        form = RenameDocumentForm(instance=document)
+    
+    return render(request, 'clients/rename_document.html', {
+        'form': form,
+        'document': document
+    })

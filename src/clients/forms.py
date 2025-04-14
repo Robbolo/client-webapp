@@ -40,3 +40,11 @@ class ClientDocumentForm(forms.ModelForm):
         widgets = {
             'description': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+class RenameDocumentForm(forms.ModelForm):
+    class Meta:
+        model = ClientDocument
+        fields = ['description']
+        widgets = {
+            'description': forms.TextInput(attrs={'class': 'form-control'})
+        }
