@@ -4,8 +4,8 @@ from .models import Client, Notification, Session, ClientDocument
 # Register your models here.
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'timezone', 'client_status', 'frequency', 'payment_tier', 'paypal_link', 'last_contact_date')
-    list_filter = ('client_status', 'payment_tier', 'timezone', 'frequency')
+    list_display = ('name', 'email', 'timezone', 'client_status', 'frequency', 'current_package', 'payment_info', 'last_contact_date')
+    list_filter = ('client_status', 'current_package', 'timezone', 'frequency')
     search_fields = ('name', 'email', 'location')
 
 admin.site.register(Notification)

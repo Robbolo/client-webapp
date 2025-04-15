@@ -8,7 +8,7 @@ from pathlib import Path
 class Client(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
-    phone_number = models.CharField(max_length=20, blank=True)
+    social_media = models.CharField(max_length=20, blank=True)
     location = models.CharField(max_length=100, blank=True)
     timezone = models.CharField(
         max_length=50,
@@ -47,12 +47,12 @@ class Client(models.Model):
             ],
             default='Enquiring'
             )
-    payment_tier = models.CharField(  
+    current_package = models.CharField(  
         max_length=50,
         choices=[
             ('Free', 'Free'), 
-            ('Three-session package', 'Three-session package'), 
-            ('Six-session package', 'Six-session package'),
+            ('3-session package', '3-session package'), 
+            ('6-session package', '6-session package'),
             ],
             default='Free' 
             )
@@ -67,10 +67,13 @@ class Client(models.Model):
             ],
             default='Ad-hoc'
             )
-    paypal_link = models.URLField(blank=True)
+    payment_info = models.CharField(max_length=50, blank=True)
     last_contact_date = models.DateField(null=True, blank=True)
     notes = models.TextField(blank=True)
     photo = models.ImageField(upload_to='client_photos/', blank=True, null=True)
+    price = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
+    paid_sessions_remaining = models.PositiveIntegerField(default=0)
+    last_invoice_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.name

@@ -25,7 +25,7 @@
                     <p class="card-text">
                         <strong>Email:</strong> {{ client.email }}<br>
                         <strong>Status:</strong> {{ client.client_status }}<br>
-                        <strong>Payment Tier:</strong> {{ client.payment_tier }}<br>
+                        <strong>Current Package:</strong> {{ client.current_package }}<br>
                     </p>
                     <a href="{% url 'client_detail' client.id %}" class="btn btn-primary">View Details</a>
                 </div>

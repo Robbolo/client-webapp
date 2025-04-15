@@ -7,6 +7,7 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span>Client Details: {{ client.name }}</span>
+            <a href="{% url 'assign_package' client.id %}" class="btn btn-sm btn-light">Add Package</a>
             <a href="{% url 'edit_client' client.id %}" class="btn btn-sm btn-light">Edit Client</a>
         </div>
         <div class="card-body">
@@ -17,15 +18,18 @@
             {% endif %}
             <div class="row">
                 <div class="col-md-6 mb-3"><label>Email:</label><div>{{ client.email }}</div></div>
-                <div class="col-md-6 mb-3"><label>Phone Number:</label><div>{{ client.phone_number }}</div></div>
                 <div class="col-md-6 mb-3"><label>Location:</label><div>{{ client.location }}</div></div>
+                <div class="col-md-6 mb-3"><label>Social Media:</label><div>{{ client.social_media }}</div></div>
                 <div class="col-md-6 mb-3"><label>Timezone:</label><div>{{ client.timezone }}</div></div>
                 <div class="col-md-6 mb-3"><label>Client Source:</label><div>{{ client.client_source }}</div></div>
                 <div class="col-md-6 mb-3"><label>Status:</label><div>{{ client.client_status }}</div></div>
-                <div class="col-md-6 mb-3"><label>Payment Tier:</label><div>{{ client.payment_tier }}</div></div>
+                <div class="col-md-6 mb-3"><label>Paid Sessions Remaining:</label><div>{{ client.paid_sessions_remaining }}</div></div>
+                <div class="col-md-6 mb-3"><label>Current Package:</label><div>{{ client.payment_tier }}</div></div>
+                <div class="col-md-6 mb-3"><label>Session Price:</label><div>£{{ client.price }}</div></div>
                 <div class="col-md-6 mb-3"><label>Frequency:</label><div>{{ client.frequency }}</div></div>
-                <div class="col-md-6 mb-3"><label>PayPal Link:</label><div><a href="{{ client.paypal_link }}" target="_blank">{{ client.paypal_link }}</a></div></div>
+                <div class="col-md-6 mb-3"><label>Payment Info:</label><div>{{ client.payment_info }}</a></div></div>
                 <div class="col-md-6 mb-3"><label>Last Contact Date:</label><div>{{ client.last_contact_date }}</div></div>
+                <div class="col-md-6 mb-3"><label>Last Invoice Date:</label><div>{{ client.last_invoice_date }}</div></div>
                 <div class="col-12 mb-3"><label>Notes:</label><div>{{ client.notes }}</div></div>
             </div>
         </div>

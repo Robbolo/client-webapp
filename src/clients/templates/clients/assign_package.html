@@ -1,0 +1,39 @@
+{% extends 'clients/base.html' %}
+{% block title %}Assign Package{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            Assign New Package for {{ client.name }}
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+
+                <!-- Number of Sessions Dropdown -->
+                <div class="form-group">
+                    <label for="id_number_of_sessions">Number of Sessions</label>
+                    <select name="number_of_sessions" id="id_number_of_sessions" class="form-control">
+                        <option value="3">3</option>
+                        <option value="6">6</option>
+                        <option value="10">10</option>
+
+                    </select>
+                </div>
+
+                <!-- Price per Session (Read-only) -->
+                <div class="form-group">
+                    <label>Price per Session</label>
+                    <input type="text" class="form-control" value="£{{ client.price }}" readonly>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'client_detail' client.id %}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Generate Invoice & Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,11 +1,17 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Client, Notification, Session, ClientDocument
-from .forms import ClientForm, SessionForm, ClientDocumentForm, RenameDocumentForm
+from .forms import ClientForm, SessionForm, ClientDocumentForm, RenameDocumentForm,AssignPackageForm
 from datetime import timedelta
 from django.utils import timezone
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, FileResponse
 from django.urls import reverse
 from django.views.decorators.http import require_POST
+from django.core.files import File
+from django.conf import settings
+from django.db.models import F
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from pathlib import Path
 
 # Create your views here.
 def client_detail(request, client_id):
@@ -120,6 +126,10 @@ def mark_session_completed(request, session_id):
     session.is_completed = True
     session.is_no_show = False
     session.save()
+    if session.session_type == 'package' and session.client.paid_sessions_remaining > 0:
+        session.client.paid_sessions_remaining = F('paid_sessions_remaining') - 1
+        session.client.save()
+
     return redirect('client_detail', client_id=session.client.id)
 
 def mark_session_no_show(request, session_id):
@@ -132,6 +142,9 @@ def mark_session_no_show(request, session_id):
 
 def undo_session_status(request, session_id):
     session = get_object_or_404(Session, pk=session_id)
+    if session.session_type == 'package':
+        session.client.paid_sessions_remaining = F('paid_sessions_remaining') + 1
+        session.client.save()
     session.is_completed = False
     session.is_no_show = False
     session.save()
@@ -186,4 +199,62 @@ def rename_document(request, document_id):
     return render(request, 'clients/rename_document.html', {
         'form': form,
         'document': document
+    })
+
+def assign_package(request, client_id):
+    client = get_object_or_404(Client, pk=client_id)
+
+    if request.method == 'POST':
+        form = AssignPackageForm(request.POST, client=client)
+        if form.is_valid():
+            sessions = form.cleaned_data['number_of_sessions']
+            price = client.price
+            price_per_session = round(price / sessions, 2)
+
+            # Update the client
+            client.paid_sessions_remaining += sessions
+            client.payment_tier = f"{sessions}-session package"
+            client.last_invoice_date = timezone.now()
+            client.save()
+
+            # Generate PDF invoice
+            buffer = BytesIO()
+            p = canvas.Canvas(buffer)
+            p.setFont("Helvetica", 12)
+            p.drawString(100, 800, "Invoice for Coaching Package")
+            p.drawString(100, 770, f"Client: {client.name}")
+            p.drawString(100, 750, f"Package: {sessions} sessions")
+            p.drawString(100, 730, f"Total Price: £{price}")
+            p.drawString(100, 710, f"Price per session: £{price_per_session}")
+            p.drawString(100, 690, f"Date: {timezone.now().strftime('%Y-%m-%d')}")
+            p.showPage()
+            p.save()
+            buffer.seek(0)
+
+            # Save PDF to media/documents/
+            safe_name = client.name.replace(" ", "_").replace("/", "-")
+            filename = f"{safe_name}_invoice_{timezone.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+            documents_dir = Path(settings.MEDIA_ROOT) / 'documents'
+            documents_dir.mkdir(parents=True, exist_ok=True)
+            file_path = documents_dir / filename
+
+            with open(file_path, 'wb') as f:
+                f.write(buffer.getvalue())
+
+            # Save to ClientDocument model
+            with open(file_path, 'rb') as f:
+                django_file = File(f)
+                document = ClientDocument(
+                    client=client,
+                    description=filename
+                )
+                document.file.save(filename, django_file, save=True)
+
+            return redirect('client_detail', client_id=client.id)
+    else:
+        form = AssignPackageForm(client=client)
+
+    return render(request, 'clients/assign_package.html', {
+        'form': form,
+        'client': client
     })
