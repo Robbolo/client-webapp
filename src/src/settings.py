@@ -11,9 +11,15 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+#load environment variables for sensitive banking details
+load_dotenv(dotenv_path=Path(BASE_DIR) / '.env')
 
 # Media settings
 MEDIA_URL = '/media/'

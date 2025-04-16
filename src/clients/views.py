@@ -12,6 +12,7 @@ from django.db.models import F
 from io import BytesIO
 from reportlab.pdfgen import canvas
 from pathlib import Path
+from .utils import generate_invoice_pdf 
 
 # Create your views here.
 def client_detail(request, client_id):
@@ -209,7 +210,7 @@ def assign_package(request, client_id):
         if form.is_valid():
             sessions = form.cleaned_data['number_of_sessions']
             price = client.price
-            price_per_session = round(price / sessions, 2)
+            total_price = price * sessions
 
             # Update the client
             client.paid_sessions_remaining += sessions
@@ -219,17 +220,16 @@ def assign_package(request, client_id):
 
             # Generate PDF invoice
             buffer = BytesIO()
-            p = canvas.Canvas(buffer)
-            p.setFont("Helvetica", 12)
-            p.drawString(100, 800, "Invoice for Coaching Package")
-            p.drawString(100, 770, f"Client: {client.name}")
-            p.drawString(100, 750, f"Package: {sessions} sessions")
-            p.drawString(100, 730, f"Total Price: £{price}")
-            p.drawString(100, 710, f"Price per session: £{price_per_session}")
-            p.drawString(100, 690, f"Date: {timezone.now().strftime('%Y-%m-%d')}")
-            p.showPage()
-            p.save()
+            generate_invoice_pdf(
+                buffer=buffer,
+                client_name=client.name,
+                package_info=f"{sessions} sessions",
+                session_price=client.price,
+                total_price=total_price,
+                due_date=timezone.now().date() + timedelta(days=7),
+            )
             buffer.seek(0)
+
 
             # Save PDF to media/documents/
             safe_name = client.name.replace(" ", "_").replace("/", "-")

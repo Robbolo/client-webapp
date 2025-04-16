@@ -13,6 +13,7 @@ class ClientForm(forms.ModelForm):
             'client_source',
             'client_status',
             'current_package',
+            'paid_sessions_remaining',
             'frequency',
             'payment_info',
             'last_contact_date',
