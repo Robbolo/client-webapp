@@ -65,3 +65,15 @@ class AssignPackageForm(forms.Form):
         super().__init__(*args, **kwargs)
         if self.client:
             self.price = self.client.price
+
+
+class EditSessionForm(forms.ModelForm):
+    class Meta:
+        model = Session
+        fields = ['date', 'session_type', 'topic', 'notes']
+        widgets = {
+            'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'topic': forms.TextInput(attrs={'class': 'form-control'}),
+            'notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'session_type': forms.Select(attrs={'class': 'form-control'}),
+        }

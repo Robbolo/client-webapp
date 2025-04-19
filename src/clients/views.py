@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Client, Notification, Session, ClientDocument
-from .forms import ClientForm, SessionForm, ClientDocumentForm, RenameDocumentForm,AssignPackageForm
+from .forms import ClientForm, SessionForm, EditSessionForm, ClientDocumentForm, RenameDocumentForm,AssignPackageForm
 from datetime import timedelta
 from django.utils import timezone
 from django.http import HttpResponseRedirect, FileResponse
@@ -280,3 +280,16 @@ def assign_package(request, client_id):
         'form': form,
         'client': client
     })
+
+def edit_session(request, session_id):
+    session = get_object_or_404(Session, id=session_id)
+
+    if request.method == 'POST':
+        form = EditSessionForm(request.POST, instance=session)
+        if form.is_valid():
+            form.save()
+            return redirect('client_detail', client_id=session.client.id)
+    else:
+        form = EditSessionForm(instance=session)
+
+    return render(request, 'clients/edit_session.html', {'form': form, 'session': session})

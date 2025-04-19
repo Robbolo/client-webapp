@@ -102,7 +102,7 @@
                             <td>{{ session.session_type|title }}</td>
                             <td>{{ session.topic }}</td>
                             <td>{{ session.notes|linebreaksbr }}</td>
-                            <td>
+                            <td><a href="{% url 'edit_session' session.id %}" class="btn btn-sm btn-info mb-1">Edit</a>
                                 <a href="{% url 'mark_session_completed' session.id %}" class="btn btn-sm btn-success">Completed</a>
                                 <a href="{% url 'mark_session_no_show' session.id %}" class="btn btn-sm btn-danger">No Show</a>
                             </td>

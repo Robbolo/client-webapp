@@ -20,5 +20,6 @@ urlpatterns = [
     path('document/<int:document_id>/delete/', views.delete_document, name='delete_document'),
     path('document/<int:document_id>/rename/', views.rename_document, name='rename_document'),
     path('client/<int:client_id>/assign-package/', views.assign_package, name='assign_package'),
+    path('session/<int:session_id>/edit/', views.edit_session, name='edit_session')
 
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
