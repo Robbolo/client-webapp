@@ -124,21 +124,42 @@ def add_session(request, client_id):
 
 def mark_session_completed(request, session_id):
     session = get_object_or_404(Session, pk=session_id)
+    client = session.client
+
+    # Mark session complete and not a no-show
     session.is_completed = True
     session.is_no_show = False
     session.save()
-    if session.session_type == 'package' and session.client.paid_sessions_remaining > 0:
-        session.client.paid_sessions_remaining = F('paid_sessions_remaining') - 1
-        session.client.save()
 
+    # Increment completed session count (always)
+    client.completed_sessions_count = F('completed_sessions_count') + 1
+
+    # Reduce paid session count only for 'package' sessions
+    if session.session_type == 'package' and client.paid_sessions_remaining > 0:
+        client.paid_sessions_remaining = F('paid_sessions_remaining') - 1
+
+    client.save()
     return redirect('client_detail', client_id=session.client.id)
 
 def mark_session_no_show(request, session_id):
     session = get_object_or_404(Session, pk=session_id)
+    client = session.client
+
+    # Mark the session as completed and flagged as a no-show
     session.is_completed = True
     session.is_no_show = True
     session.save()
-    return redirect('client_detail', client_id=session.client.id)
+
+    # Increment no-show session count (for all session types)
+    client.no_show_sessions_count = F('no_show_sessions_count') + 1
+
+    # Reduce paid session count only for package sessions
+    if session.session_type == 'package' and client.paid_sessions_remaining > 0:
+        client.paid_sessions_remaining = F('paid_sessions_remaining') - 1
+
+    client.save()
+
+    return redirect('client_detail', client_id=client.id)
 
 
 def undo_session_status(request, session_id):
@@ -214,8 +235,9 @@ def assign_package(request, client_id):
 
             # Update the client
             client.paid_sessions_remaining += sessions
-            client.payment_tier = f"{sessions}-session package"
+            client.current_package = f"{sessions}-session package"
             client.last_invoice_date = timezone.now()
+            client.invoice_status = 'Generated'
             client.save()
 
             # Generate PDF invoice

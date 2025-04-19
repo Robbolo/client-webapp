@@ -24,7 +24,10 @@
                 <div class="col-md-6 mb-3"><label>Client Source:</label><div>{{ client.client_source }}</div></div>
                 <div class="col-md-6 mb-3"><label>Status:</label><div>{{ client.client_status }}</div></div>
                 <div class="col-md-6 mb-3"><label>Paid Sessions Remaining:</label><div>{{ client.paid_sessions_remaining }}</div></div>
-                <div class="col-md-6 mb-3"><label>Current Package:</label><div>{{ client.payment_tier }}</div></div>
+                <div class="col-md-6 mb-3"><label>Invoice Status:</label><div>{{ client.get_invoice_status_display }}</div></div>
+                <div class="col-md-6 mb-3"><label>Completed Sessions:</label><div>{{ client.completed_sessions_count }}</div></div>
+                <div class="col-md-6 mb-3"><label>No Show Sessions:</label><div>{{ client.no_show_sessions_count }}</div></div>
+                <div class="col-md-6 mb-3"><label>Current Package:</label><div>{{ client.current_package }}</div></div>
                 <div class="col-md-6 mb-3"><label>Session Price:</label><div>£{{ client.price }}</div></div>
                 <div class="col-md-6 mb-3"><label>Frequency:</label><div>{{ client.frequency }}</div></div>
                 <div class="col-md-6 mb-3"><label>Payment Info:</label><div>{{ client.payment_info }}</a></div></div>

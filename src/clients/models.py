@@ -74,6 +74,19 @@ class Client(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
     paid_sessions_remaining = models.PositiveIntegerField(default=0)
     last_invoice_date = models.DateField(null=True, blank=True)
+    invoice_status = models.CharField(
+        max_length=50,
+        choices = [
+            ('No need', 'No need'),
+            ('Generated', 'Generated'),
+            ('Sent', 'Sent'),
+            ('Paid', 'Paid'),
+            ('Issue', 'Issue')
+            ],
+        default='No need'
+        )
+    completed_sessions_count = models.PositiveIntegerField(default=0)
+    no_show_sessions_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.name
