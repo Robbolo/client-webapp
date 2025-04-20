@@ -41,7 +41,10 @@ def notify_clients_not_contacted_monthly():
                     )
                 
 def notify_clients_low_sessions():
-    clients = Client.objects.filter(paid_sessions_remaining=1,client_status='Paying')
+    clients = Client.objects.filter(paid_sessions_remaining=1,
+                                    client_status='Paying',
+                                    client_lifecycle='Active',
+                                    )   
 
     for client in clients:
         message=f"Reminder: {client.name} has only 1 paid session remaining."
@@ -54,7 +57,10 @@ def notify_clients_low_sessions():
                 )
 
 def notify_clients_no_sessions_left():
-    clients = Client.objects.filter(paid_sessions_remaining=0, client_status='Paying')
+    clients = Client.objects.filter(paid_sessions_remaining=0,
+                                    client_status='Paying',
+                                    client_lifecycle='Active',
+                                    )
 
     for client in clients:
         message=f"Urgent: {client.name} has no paid sessions remaining."

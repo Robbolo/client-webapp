@@ -87,7 +87,27 @@ class Client(models.Model):
         )
     completed_sessions_count = models.PositiveIntegerField(default=0)
     no_show_sessions_count = models.PositiveIntegerField(default=0)
+    client_lifecycle = models.CharField(
+        max_length=20,
+        choices = [
+            ('Active', 'Active'),
+            ('Paused', 'Paused'),
+            ('Inactive', 'Inactive'),
+            ('Archived', 'Archived'),
+            ],
+        default='Active'
+        )
+    lifecycle_status_date = models.DateField(null=True, blank=True)
+    def save(self, *args, **kwargs):
+        if self.pk:
+            original = Client.objects.get(pk=self.pk)
+            if original.client_lifecycle != self.client_lifecycle:
+                self.lifecycle_status_date = timezone.now().date()
+        else:
+            self.lifecycle_status_date = timezone.now().date()
 
+        super().save(*args, **kwargs)
+    
     def __str__(self):
         return self.name
     
