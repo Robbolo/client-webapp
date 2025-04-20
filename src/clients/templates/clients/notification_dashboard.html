@@ -5,7 +5,11 @@
 
     {% if notifications %}
         {% for notification in notifications %}
-            <div class="notification-card">
+        <div class="notification-card {% if notification.notification_priority == 'Urgent' %}urgent{% endif %}">
+            <p><strong>{{ notification.client.name }}</strong></p>
+                <p><strong>Type:</strong> {{ notification.notification_type|title }} | 
+                   <strong>Priority:</strong> {{ notification.notification_priority|title }} |
+                   <strong>Created at: </strong><em>{{ notification.created_at|date:"d M Y H:i" }}</em></p>
                 <p>{{ notification.message }}</p>
                 <form method="post" action="{% url 'mark_as_read' notification.id %}">
                     {% csrf_token %}
@@ -17,6 +21,5 @@
         <div class="alert alert-info">No unread notifications!</div>
     {% endif %}
 
-    <a href="{% url 'read_notifications' %}" class="btn btn-outline-secondary mt-4">View Read Notifications</a>
-
+    <a href="{% url 'read_notifications' %}" class="btn btn-sm btn-light">View Read Notifications</a>
 {% endblock %}

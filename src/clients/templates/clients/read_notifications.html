@@ -1,19 +1,23 @@
 {% extends 'clients/base.html' %}
-{% block title %}Read notifications{% endblock %}
+{% block title %}Read Notifications{% endblock %}
 {% block content %}
 
-    <h2>Completed Notifications</h2>
+    <h2 class="mb-4">Completed Notifications</h2>
+
     {% if notifications %}
         {% for notification in notifications %}
-            <div class="notification">
+            <div class="notification-card {% if notification.notification_priority == 'urgent' %}bg-danger text-white{% endif %}">
                 <p><strong>{{ notification.client.name }}</strong></p>
+                <p><strong>Type:</strong> {{ notification.notification_type|title }} |
+                   <strong>Priority:</strong> {{ notification.notification_priority|title }}</p>
                 <p>{{ notification.message }}</p>
                 <p><em>{{ notification.created_at|date:"d M Y H:i" }}</em></p>
             </div>
         {% endfor %}
     {% else %}
-        <p>No completed notifications.</p>
+        <div class="alert alert-info">No completed notifications.</div>
     {% endif %}
-    <a href="{% url 'notification_dashboard' %}">⬅ Back to Active Notifications</a>
+
+    <a href="{% url 'notification_dashboard' %}" class="btn btn-sm btn-light">⬅ Back to Active Notifications</a>
 
 {% endblock %}

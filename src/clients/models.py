@@ -98,6 +98,25 @@ class Notification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     read = models.BooleanField(default=False)
 
+    notification_types = [('Contact', 'Contact'),
+                          ('Sessions', 'Sessions'),
+                          ('Payment', 'Payment'),
+                          ('Other', 'Other')]
+    notification_type = models.CharField(
+        max_length=40,
+        choices=notification_types,
+        default='Other'
+        )
+    
+    priority_levels = [('Reminder', 'Reminder'),
+                      ('Urgent', 'Urgent'),
+                      ]
+    notification_priority = models.CharField(
+        max_length=40,
+        choices=priority_levels,
+        default='Reminder'
+        )
+
     def __str__(self):
         return f"Notification for {self.client.name}"
 

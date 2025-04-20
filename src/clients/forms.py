@@ -35,7 +35,9 @@ class SessionForm(forms.ModelForm):
         fields = ['date', 'session_type', 'topic', 'notes', 'is_completed']
         widgets = {
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'notes': forms.Textarea(attrs={'rows': 4}),
+            'topic': forms.TextInput(attrs={'class': 'form-control'}),
+            'notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'session_type': forms.Select(attrs={'class': 'form-control'}),
         }
 
 class ClientDocumentForm(forms.ModelForm):
