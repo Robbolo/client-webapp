@@ -223,6 +223,7 @@ def assign_package(request, client_id):
             generate_invoice_pdf(
                 buffer=buffer,
                 client_name=client.name,
+                client_email=client.email,
                 package_info=f"{sessions} sessions",
                 session_price=client.price,
                 total_price=total_price,

@@ -12,8 +12,8 @@ import os
 # Load .env file (this should only run once)
 
 
-def generate_invoice_pdf(buffer, client_name, package_info, session_price, total_price, due_date):
-    
+def generate_invoice_pdf(buffer, client_name, client_email, package_info, session_price, total_price, due_date):
+
     # Load font and logo paths
     reg_font_path = Path(settings.BASE_DIR) / 'clients' / 'utils' / 'Alegreya-Regular.ttf'
     bold_font_path = Path(settings.BASE_DIR) / 'clients' / 'utils' / 'Alegreya-Bold.ttf'
@@ -74,6 +74,8 @@ def generate_invoice_pdf(buffer, client_name, package_info, session_price, total
     c.setFont("Alegreya", 12)
     first_name = client_name.split(' ')[0]
     c.drawString(margin, y, f"FAO: {client_name},")
+    y -= line_height
+    c.drawString(margin, y, f"{client_email}")
     y -= line_height * 1.5
     y -= 20
     text_object = c.beginText(margin, y)
