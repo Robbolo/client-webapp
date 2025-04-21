@@ -2,6 +2,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
+from .views import ClientTableView
 
 urlpatterns = [
     path('', views.client_list, name='client_list'),
@@ -20,6 +21,9 @@ urlpatterns = [
     path('document/<int:document_id>/delete/', views.delete_document, name='delete_document'),
     path('document/<int:document_id>/rename/', views.rename_document, name='rename_document'),
     path('client/<int:client_id>/assign-package/', views.assign_package, name='assign_package'),
-    path('session/<int:session_id>/edit/', views.edit_session, name='edit_session')
+    path('session/<int:session_id>/edit/', views.edit_session, name='edit_session'),
+    path('client/<int:client_id>/contacted/', views.update_last_contacted, name='update_last_contacted'),
+    path('client-table/', ClientTableView.as_view(), name='client_table'),
+
 
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

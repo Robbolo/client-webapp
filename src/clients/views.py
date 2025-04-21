@@ -14,6 +14,8 @@ from reportlab.pdfgen import canvas
 from pathlib import Path
 from .utils import generate_invoice_pdf 
 from clients.notification_engine import run_all_notification_checks
+from django_tables2 import SingleTableView
+from .tables import ClientTable
 
 # Create your views here.
 def client_detail(request, client_id):
@@ -272,3 +274,14 @@ def edit_session(request, session_id):
         form = EditSessionForm(instance=session)
 
     return render(request, 'clients/edit_session.html', {'form': form, 'session': session})
+
+def update_last_contacted(request, client_id):
+    client = get_object_or_404(Client, id=client_id)
+    client.last_contact_date = timezone.now().date()
+    client.save()
+    return redirect('client_detail', client_id=client.id)
+
+class ClientTableView(SingleTableView):
+    model = Client
+    table_class = ClientTable
+    template_name = "clients/client_table.html"

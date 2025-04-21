@@ -1,0 +1,15 @@
+{% extends "clients/base.html" %}
+{% load render_table from django_tables2 %}
+
+{% block title %}Client Table View{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Client Table View</h2>
+        <a href="{% url 'client_list' %}" class="btn btn-outline-primary btn-sm">Card View</a>
+    </div>
+
+    {% render_table table %}
+</div>
+{% endblock %}
