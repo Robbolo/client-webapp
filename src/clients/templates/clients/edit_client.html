@@ -10,20 +10,57 @@
         <div class="card-body">
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="row">
-                    {% for field in form %}
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                {{ field.label_tag }}
-                                {{ field }}
-                                {% if field.errors %}
-                                    <div class="text-danger small">{{ field.errors }}</div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endfor %}
+
+                <!-- Personal Information -->
+                <div class="info-section">
+                    <h5 class="info-section-header">Personal Information</h5>
+                    <div class="info-section-body row">
+                        <div class="col-md-6 mb-3 form-group">{{ form.email.label_tag }}{{ form.email }}</div>
+                        <div class="col-md-6 mb-3 form-group">{{ form.location.label_tag }}{{ form.location }}</div>
+                        <div class="col-md-6 mb-3 form-group">{{ form.social_media.label_tag }}{{ form.social_media }}</div>
+                        <div class="col-md-6 mb-3 form-group">{{ form.timezone.label_tag }}{{ form.timezone }}</div>
+                        <div class="col-md-6 mb-3 form-group">{{ form.photo.label_tag }}{{ form.photo }}</div>
+                    </div>
                 </div>
-                <div class="d-flex justify-content-between">
+
+                <!-- Business Information -->
+                <div class="info-section">
+                    <h5 class="info-section-header">Business Information</h5>
+                    <div class="info-section-body row">
+                        <div class="col-md-6 mb-3 form-group">{{ form.client_source.label_tag }}{{ form.client_source }}</div>
+                        <div class="col-md-6 mb-3 form-group">{{ form.client_status.label_tag }}{{ form.client_status }}</div>
+                        <div class="col-md-6 mb-3 form-group">{{ form.client_lifecycle.label_tag }}{{ form.client_lifecycle }}</div>
+                        <div class="col-md-6 mb-3 form-group">{{ form.last_contact_date.label_tag }}{{ form.last_contact_date }}</div>
+                        <div class="col-md-6 mb-3 form-group">{{ form.last_invoice_date.label_tag }}{{ form.last_invoice_date }}</div>
+                        <div class="col-md-6 mb-3 form-group">{{ form.invoice_status.label_tag }}{{ form.invoice_status }}</div>
+                        <div class="col-md-6 mb-3 form-group">{{ form.current_package.label_tag }}{{ form.current_package }}</div>
+                        <div class="col-md-6 mb-3 form-group">{{ form.frequency.label_tag }}{{ form.frequency }}</div>
+                        <div class="col-md-6 mb-3 form-group">{{ form.payment_info.label_tag }}{{ form.payment_info }}</div>
+                    </div>
+                </div>
+
+                <!-- Session Summary -->
+                <div class="info-section">
+                    <h5 class="info-section-header">Session Summary</h5>
+                    <div class="info-section-body row">
+                        <div class="col-md-6 mb-3 form-group">{{ form.paid_sessions_remaining.label_tag }}{{ form.paid_sessions_remaining }}</div>
+                        <div class="col-md-6 mb-3 form-group">{{ form.completed_sessions_count.label_tag }}{{ form.completed_sessions_count }}</div>
+                        <div class="col-md-6 mb-3 form-group">{{ form.no_show_sessions_count.label_tag }}{{ form.no_show_sessions_count }}</div>
+                        <div class="col-md-6 mb-3 form-group">{{ form.price.label_tag }}{{ form.price }}</div>
+                    </div>
+                </div>
+
+                <!-- Notes -->
+                <div class="info-section">
+                    <h5 class="info-section-header">Client Notes</h5>
+                    <div class="info-section-body form-group">
+                        {{ form.notes.label_tag }}
+                        {{ form.notes }}
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-between mt-4">
                     <a href="{% url 'client_detail' client.id %}" class="btn btn-secondary">Cancel</a>
                     <button type="submit" class="btn btn-purple">Save Changes</button>
                 </div>
@@ -31,4 +68,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}

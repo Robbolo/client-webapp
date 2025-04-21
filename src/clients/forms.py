@@ -23,6 +23,7 @@ class ClientForm(forms.ModelForm):
             'invoice_status',
             'completed_sessions_count',
             'no_show_sessions_count',
+            'client_lifecycle',
         ]
         widgets = {
             'last_contact_date': forms.DateInput(attrs={'type': 'date'}),

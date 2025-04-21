@@ -107,6 +107,13 @@ class Client(models.Model):
             self.lifecycle_status_date = timezone.now().date()
 
         super().save(*args, **kwargs)
+
+    @property
+    def next_session(self):
+        return self.sessions.filter(
+            is_completed=False,
+            date__gte=timezone.now()
+        ).order_by('date').first()
     
     def __str__(self):
         return self.name

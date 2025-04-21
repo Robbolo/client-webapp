@@ -23,9 +23,14 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ client.name }}</h5>
                     <p class="card-text">
-                        <strong>Email:</strong> {{ client.email }}<br>
                         <strong>Status:</strong> {{ client.client_status }}<br>
-                        <strong>Current Package:</strong> {{ client.current_package }}<br>
+                        <strong>Session Credits:</strong> {{ client.paid_sessions_remaining }}<br>
+                        <strong>Last Contacted:</strong> {{ client.last_contact_date }}<br>
+                        {% if client.next_session %}
+                            <strong>Next Session:</strong> {{ client.next_session.date|date:"D, d M Y H:i" }}<br>
+                        {% else %}
+                            <strong>Next Session:</strong> None scheduled<br>
+                        {% endif %}
                     </p>
                     <a href="{% url 'client_detail' client.id %}" class="btn btn-primary">View Details</a>
                 </div>
