@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.views.decorators.http import require_POST
 from django.core.files import File
 from django.conf import settings
-from django.db.models import F
+from django.db.models import F, Count
 from io import BytesIO
 from reportlab.pdfgen import canvas
 from pathlib import Path
@@ -285,3 +285,18 @@ class ClientTableView(SingleTableView):
     model = Client
     table_class = ClientTable
     template_name = "clients/client_table.html"
+
+def business_insights(request):
+    total_clients = Client.objects.count()
+
+    client_sources = Client.objects.values('client_source').annotate(count=Count('id'))
+    lifecycle_statuses = Client.objects.values('client_lifecycle').annotate(count=Count('id'))
+    payment_tiers = Client.objects.values('current_package').annotate(count=Count('id'))
+
+    context = {
+        'total_clients': total_clients,
+        'client_sources': list(client_sources),
+        'lifecycle_statuses': list(lifecycle_statuses),
+        'payment_tiers': list(payment_tiers),
+    }
+    return render(request, 'clients/insights.html', context)

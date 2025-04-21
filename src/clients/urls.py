@@ -24,6 +24,7 @@ urlpatterns = [
     path('session/<int:session_id>/edit/', views.edit_session, name='edit_session'),
     path('client/<int:client_id>/contacted/', views.update_last_contacted, name='update_last_contacted'),
     path('client-table/', ClientTableView.as_view(), name='client_table'),
+    path('insights/', views.business_insights, name='business_insights'),
 
 
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

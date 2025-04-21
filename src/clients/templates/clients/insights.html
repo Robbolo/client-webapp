@@ -1,0 +1,54 @@
+{% extends 'clients/base.html' %}
+{% block title %}Business Insights{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Business Insights</h2>
+    <p><strong>Total Clients:</strong> {{ total_clients }}</p>
+
+    <div class="row">
+        <div class="col-md-6">
+            <canvas id="clientSourceChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id="lifecycleChart"></canvas>
+        </div>
+        <div class="col-md-6 mt-4">
+            <canvas id="paymentTierChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const clientSources = JSON.parse('{{ client_sources|safe|escapejs }}');
+    const lifecycleStatuses = JSON.parse('{{ lifecycle_statuses|safe|escapejs }}');
+    const paymentTiers = JSON.parse('{{ payment_tiers|safe|escapejs }}');
+
+    function renderChart(id, data, label) {
+        const labels = data.map(item => item[label]);
+        const counts = data.map(item => item.count);
+        new Chart(document.getElementById(id), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: `Clients by ${label.replace('_', ' ')}`,
+                    data: counts,
+                    backgroundColor: '#6f42c1'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                }
+            }
+        });
+    }
+
+    renderChart("clientSourceChart", clientSources, 'client_source');
+    renderChart("lifecycleChart", lifecycleStatuses, 'client_lifecycle');
+    renderChart("paymentTierChart", paymentTiers, 'payment_tier');
+</script>
+{% endblock %}
