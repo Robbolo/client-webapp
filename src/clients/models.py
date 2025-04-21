@@ -6,6 +6,7 @@ from pathlib import Path
 
 # Create class for client information
 class Client(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=100)
     email = models.EmailField()
     social_media = models.CharField(max_length=20, blank=True)
@@ -71,7 +72,7 @@ class Client(models.Model):
     last_contact_date = models.DateField(null=True, blank=True)
     notes = models.TextField(blank=True)
     photo = models.ImageField(upload_to='client_photos/', blank=True, null=True)
-    price = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
+    price = models.DecimalField(max_digits=5, decimal_places=0, default=80)
     paid_sessions_remaining = models.PositiveIntegerField(default=0)
     last_invoice_date = models.DateField(null=True, blank=True)
     invoice_status = models.CharField(

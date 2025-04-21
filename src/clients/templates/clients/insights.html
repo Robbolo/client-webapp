@@ -1,11 +1,13 @@
 {% extends 'clients/base.html' %}
 {% block title %}Business Insights{% endblock %}
 {% block content %}
+
 <div class="container mt-5">
     <h2 class="mb-4">Business Insights</h2>
     <p><strong>Total Clients:</strong> {{ total_clients }}</p>
 
     <div class="row">
+        <!-- NEW CHART - Step 1. add new canvas space and give canvas ID -->
         <div class="col-md-6">
             <canvas id="clientSourceChart"></canvas>
         </div>
@@ -16,24 +18,50 @@
             <canvas id="paymentTierChart"></canvas>
         </div>
     </div>
+    <p><strong>Total Sessions:</strong> {{ total_sessions }}</p>
+    <div class="row">
+        <div class="col-md-6">
+            <canvas id="sessionTypeChart"></canvas>
+        </div>
+        <div class="col-md-12 mt-5">
+            <canvas id="weeklySessionsChart" height="100"></canvas>
+        </div>
+        <div class="col-md-12 mt-5">
+            <canvas id="newClientsChart" height="100"></canvas>
+        </div>
+    </div>
 </div>
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const clientSources = JSON.parse('{{ client_sources|safe|escapejs }}');
-    const lifecycleStatuses = JSON.parse('{{ lifecycle_statuses|safe|escapejs }}');
-    const paymentTiers = JSON.parse('{{ payment_tiers|safe|escapejs }}');
+    // NEW CHART - Step 2. add new let variable for each new chart
+    let clientSources = [],
+        lifecycleStatuses = [],
+        paymentTiers = [],
+        sessionTypes = []
+        ;
 
-    function renderChart(id, data, label) {
-        const labels = data.map(item => item[label]);
+    // NEW CHART - Step 3. Add new row here
+    try {
+        clientSources = JSON.parse('{{ client_sources|safe }}');
+        lifecycleStatuses = JSON.parse('{{ lifecycle_statuses|safe }}');
+        paymentTiers = JSON.parse('{{ payment_tiers|safe }}');
+        sessionTypes = JSON.parse('{{ session_types|safe }}');
+    } catch (e) {
+        console.error("Error parsing chart data:", e);
+    }
+    // sets up function for creating bar charts
+    function renderChart(id, data, labelKey, chartTitle) {
+        const labels = data.map(item => item[labelKey] || 'Unknown');
         const counts = data.map(item => item.count);
+
         new Chart(document.getElementById(id), {
             type: 'bar',
             data: {
                 labels: labels,
                 datasets: [{
-                    label: `Clients by ${label.replace('_', ' ')}`,
+                    label: `Clients by ${labelKey.replace('_', ' ')}`,
                     data: counts,
                     backgroundColor: '#6f42c1'
                 }]
@@ -42,13 +70,120 @@
                 responsive: true,
                 plugins: {
                     legend: { display: false },
+                    title: {
+                        display: true,
+                        text: chartTitle,
+                        font: {
+                            size: 18,
+                            weight: 'bold'
+                        },
+                        color: '#333',
+                        padding: { bottom: 10 }
+                    }
                 }
             }
         });
     }
+   // NEW CHART - Step 4 - make new renderChart (canvasid, let variable, labelKey, chartTitle)
+    renderChart("clientSourceChart", clientSources, 'client_source', 'Client Sources');
+    renderChart("lifecycleChart", lifecycleStatuses, 'client_lifecycle', 'Client Lifecycle Statuses');
+    renderChart("paymentTierChart", paymentTiers, 'current_package', 'Current Package Breakdown');
+    renderChart("sessionTypeChart", sessionTypes, 'session_type', 'Session Type Breakdown');
 
-    renderChart("clientSourceChart", clientSources, 'client_source');
-    renderChart("lifecycleChart", lifecycleStatuses, 'client_lifecycle');
-    renderChart("paymentTierChart", paymentTiers, 'payment_tier');
+    // sets up line chart for sessions
+
+    const weeklySessions = JSON.parse('{{ weekly_sessions|safe|escapejs }}');
+</script>
+<script>
+const sessionLabels = weeklySessions.map(entry => entry.week);
+const sessionCounts = weeklySessions.map(entry => entry.count);
+
+new Chart(document.getElementById('weeklySessionsChart'), {
+    type: 'line',
+    data: {
+        labels: sessionLabels,
+        datasets: [{
+            label: 'Sessions per Week',
+            data: sessionCounts,
+            backgroundColor: 'rgba(111, 66, 193, 0.2)',
+            borderColor: '#6f42c1',
+            borderWidth: 2,
+            tension: 0.3,
+            fill: true,
+            pointRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Weekly Session Volume',
+                font: { size: 18 },
+                padding: { bottom: 10 }
+            },
+            legend: { display: false }
+        },
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Week Starting'
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Number of Sessions'
+                },
+                beginAtZero: true,
+                ticks: { precision: 0 }
+            }
+        }
+    }
+});
+</script>
+
+<script>
+    const newClients = JSON.parse('{{ monthly_clients|safe|escapejs }}');
+const clientLabels = newClients.map(entry => entry.month);
+const clientCounts = newClients.map(entry => entry.count);
+
+new Chart(document.getElementById('newClientsChart'), {
+    type: 'line',
+    data: {
+        labels: clientLabels,
+        datasets: [{
+            label: 'New Clients per Month',
+            data: clientCounts,
+            backgroundColor: 'rgba(23, 162, 184, 0.2)',
+            borderColor: '#17a2b8',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.3,
+            pointRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            title: {
+                display: true,
+                text: 'New Clients per Month',
+                font: { size: 18 },
+                padding: { bottom: 10 }
+            },
+            legend: { display: false }
+        },
+        scales: {
+            x: { title: { display: true, text: 'Month' }},
+            y: {
+                title: { display: true, text: 'New Clients' },
+                beginAtZero: true,
+                ticks: { precision: 0 }
+            }
+        }
+    }
+});
 </script>
 {% endblock %}
