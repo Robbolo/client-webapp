@@ -81,8 +81,11 @@ def edit_client(request, client_id):
         if form.is_valid():
             form.save()
             return redirect('client_detail', client_id=client.id)
+        else:
+            print("Form errors:", form.errors) 
     else:
         form = ClientForm(instance=client)
+
 
     return render(request, 'clients/edit_client.html', {'form': form, 'client': client})
 
@@ -98,6 +101,7 @@ def add_session(request, client_id):
             session.save()
             return redirect('client_detail', client_id=client.id)
     else:
+        
         form = SessionForm()
 
     return render(request, 'clients/add_session.html', {'form': form, 'client': client})
