@@ -19,6 +19,7 @@ def business_insights(request):
     client_sources = list(Client.objects.values('client_source').annotate(count=Count('id')))
     lifecycle_statuses = list(Client.objects.values('client_lifecycle').annotate(count=Count('id')))
     payment_tiers = list(Client.objects.values('current_package').annotate(count=Count('id')))
+    total_revenue = sum(client.total_revenue for client in Client.objects.all())
      ## CHARTS FOR SESSIONS PER WEEK
         # calculate sessions per week for chart
     weekly_sessions = (
@@ -57,5 +58,6 @@ def business_insights(request):
         'session_types': json.dumps(session_types),
         'weekly_sessions': json.dumps(weekly_sessions_data),
         'monthly_clients': json.dumps(monthly_clients_data),
+        'total_revenue': total_revenue,
     }
     return render(request, 'clients/insights.html', context)
