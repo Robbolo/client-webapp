@@ -64,6 +64,7 @@ def assign_package(request, client_id):
             client.current_package = f"{sessions}-session package"
             client.last_invoice_date = timezone.now()
             client.invoice_status = 'Generated'
+            client.total_revenue += total_price
             client.save()
 
             # Generate PDF invoice

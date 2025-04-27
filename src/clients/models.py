@@ -88,6 +88,7 @@ class Client(models.Model):
         )
     completed_sessions_count = models.PositiveIntegerField(default=0)
     no_show_sessions_count = models.PositiveIntegerField(default=0)
+    total_revenue = models.PositiveIntegerField(default=0)
     client_lifecycle = models.CharField(
         max_length=20,
         choices = [
