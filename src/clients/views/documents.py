@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from ..models import Client, ClientDocument
+from ..models import Client, ClientDocument, Invoice
 from ..forms import ClientDocumentForm, RenameDocumentForm,AssignPackageForm
 from datetime import timedelta
 from django.utils import timezone
@@ -64,8 +64,17 @@ def assign_package(request, client_id):
             client.current_package = f"{sessions}-session package"
             client.last_invoice_date = timezone.now()
             client.invoice_status = 'Generated'
+            client.client_status = 'Paying'
             client.total_revenue += total_price
             client.save()
+
+            # add invoice record
+            Invoice.objects.create(
+                client=client,
+                amount=total_price,
+                invoice_date=timezone.now(),
+                description=f"{client.name} - {sessions} sessions - £{total_price} - {timezone.now().strftime('%Y-%m-%d')}",
+            )
 
             # Generate PDF invoice
             buffer = BytesIO()

@@ -191,3 +191,12 @@ class ClientDocument(models.Model):
 
     def __str__(self):
         return f"Document for {self.client.name}: {self.file.name}"
+    
+class Invoice(models.Model):
+    client = models.ForeignKey('Client', on_delete=models.CASCADE, related_name='invoices')
+    amount = models.DecimalField(max_digits=10, decimal_places=0)
+    invoice_date = models.DateField(auto_now_add=False)
+    description = models.CharField(max_length=255, blank=True)
+
+    def __str__(self):
+        return f"Invoice {self.id} - {self.client.name} - £{self.amount} - {self.invoice_date}"

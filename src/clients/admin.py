@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Client, Notification, Session, ClientDocument
+from .models import Client, Notification, Session, ClientDocument, Invoice
 
 # Register your models here.
 @admin.register(Client)
@@ -21,3 +21,5 @@ class SessionAdmin(admin.ModelAdmin):
 class ClientDocumentAdmin(admin.ModelAdmin):
     list_display = ['client', 'description', 'file']
     search_fields = ['client__name', 'description']
+
+admin.site.register(Invoice)

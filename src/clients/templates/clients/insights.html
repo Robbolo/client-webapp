@@ -11,6 +11,9 @@
 
     <div class="row">
         <!-- NEW CHART - Step 1. add new canvas space and give canvas ID -->
+        <div class="col-12 mt-4">
+            <canvas id="monthlyRevenueChart"></canvas>
+        </div>
         <div class="col-md-6">
             <canvas id="clientSourceChart"></canvas>
         </div>
@@ -42,7 +45,8 @@
     let clientSources = [],
         lifecycleStatuses = [],
         paymentTiers = [],
-        sessionTypes = []
+        sessionTypes = [],
+        monthlyRevenue = []
         ;
 
     // NEW CHART - Step 3. Add new row here
@@ -51,6 +55,7 @@
         lifecycleStatuses = JSON.parse('{{ lifecycle_statuses|safe }}');
         paymentTiers = JSON.parse('{{ payment_tiers|safe }}');
         sessionTypes = JSON.parse('{{ session_types|safe }}');
+        monthlyRevenue = JSON.parse('{{ monthly_revenue|safe }}');
     } catch (e) {
         console.error("Error parsing chart data:", e);
     }
@@ -148,6 +153,56 @@ new Chart(document.getElementById('weeklySessionsChart'), {
 </script>
 
 <script>
+    const revenueLabels = monthlyRevenue.map(entry => entry.month);
+    const revenueCounts = monthlyRevenue.map(entry => entry.total);
+    
+    new Chart(document.getElementById('monthlyRevenueChart'), {
+        type: 'line',
+        data: {
+            labels: revenueLabels,
+            datasets: [{
+                label: 'Invoiced Revenue per Month (£)',
+                data: sessionCounts,
+                backgroundColor: 'rgba(111, 66, 193, 0.2)',
+                borderColor: '#6f42c1',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true,
+                pointRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Monthly Revenue (£)',
+                    font: { size: 18 },
+                    padding: { bottom: 10 }
+                },
+                legend: { display: false }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Month'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Revenue (£)'
+                    },
+                    beginAtZero: true,
+                    ticks: { precision: 0 }
+                }
+            }
+        }
+    });
+    </script>
+
+<script>
     const newClients = JSON.parse('{{ monthly_clients|safe|escapejs }}');
 const clientLabels = newClients.map(entry => entry.month);
 const clientCounts = newClients.map(entry => entry.count);
@@ -189,4 +244,6 @@ new Chart(document.getElementById('newClientsChart'), {
     }
 });
 </script>
+
+
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from ..models import Client, Session
-from django.db.models import Count
+from ..models import Client, Session, Invoice
+from django.db.models import Count, Sum
 from django.db.models.functions import TruncWeek, TruncMonth
 from django_tables2 import SingleTableView
 from ..tables import ClientTable
@@ -46,6 +46,23 @@ def business_insights(request):
         {"month": entry["month"].strftime('%Y-%m'), "count": entry["count"]}
         for entry in monthly_clients
     ]
+    # CHARTS FOR REVENUE PER MONTH
+        # calculate revenue per month for chart
+    monthly_revenue = (
+    Invoice.objects
+    .annotate(month=TruncMonth('invoice_date'))
+    .values('month')
+    .annotate(total=Sum('amount'))
+    .order_by('month')
+    )
+    # turn revnue per month into json compatible format
+    monthly_revenue_data = [
+        {
+        "month": entry["month"].strftime('%Y-%m'),
+        "total": float(entry["total"]) if entry["total"] is not None else 0
+        }
+        for entry in monthly_revenue
+]
 
 
     #add the new variable to this context dict and json.dumps any non ints
@@ -59,5 +76,6 @@ def business_insights(request):
         'weekly_sessions': json.dumps(weekly_sessions_data),
         'monthly_clients': json.dumps(monthly_clients_data),
         'total_revenue': total_revenue,
+        'monthly_revenue': json.dumps(monthly_revenue_data),
     }
     return render(request, 'clients/insights.html', context)
